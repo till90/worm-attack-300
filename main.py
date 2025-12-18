@@ -409,7 +409,7 @@ HTML = r"""<!doctype html>
 
             <div class="game-foot muted" aria-label="Steuerung">
               <div><strong>Steuerung (immer nur der aktive Spieler):</strong></div>
-              <div>Angle: <strong>↑/↓</strong> oder <strong>W/S</strong> · Power: <strong>←/→</strong> oder <strong>A/D</strong> · Schießen: <strong>Space</strong>/<strong>Enter</strong></div>
+              <div>Angle: <strong>↑/↓</strong> oder <strong>W/S</strong> · Schießen: <strong>Space</strong>/<strong>Enter</strong> (halten zum Aufladen)</div>
               <div>Waffen: <strong>1</strong> Bazooka · <strong>2</strong> Granate · <strong>3</strong> Banane · Restart: <strong>R</strong> oder Button</div>
             </div>
           </div>
@@ -806,6 +806,7 @@ HTML = r"""<!doctype html>
         pendingSwitch: false,
         postShotHold: 0,
         winner: 0,
+        isCharging: false,
         _lastAimToast: 0
       };
 
@@ -1077,6 +1078,9 @@ HTML = r"""<!doctype html>
       if(!state) return;
 
       if(state.phase === "aim"){
+        if(state.isCharging){
+          state.power = clamp(state.power + 45 * dt, 10, 100);
+        }
         updateWormPhysics(dt);
       }else if(state.phase === "projectile"){
         updateProjectile(dt);
@@ -1363,9 +1367,23 @@ HTML = r"""<!doctype html>
         state.power = clamp(state.power - 3, 10, 100);
         return;
       }
-      if(keyIn(code, KEYS.FIRE)){
-        fire();
+       if(keyIn(code, KEYS.FIRE)){
+        if(!state.isCharging){
+          state.isCharging = true;
+          state.power = 10;
+        }
         return;
+      }
+    }
+
+    function onKeyUp(e){
+      if(!state || state.inputLocked || state.phase !== "aim") return;
+      var code = e.code;
+      if(keyIn(code, KEYS.FIRE)){
+        if(state.isCharging){
+          state.isCharging = false;
+          fire();
+        }
       }
     }
 
@@ -1391,6 +1409,7 @@ HTML = r"""<!doctype html>
       refreshPalette();
       startGame();
       window.addEventListener("keydown", onKeyDown, { passive: false });
+      window.addEventListener("keyup", onKeyUp, { passive: false });
       window.addEventListener("resize", onResize);
       requestAnimationFrame(loop);
     }catch(_err){
