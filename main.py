@@ -879,10 +879,12 @@ HTML = r"""<!doctype html>
 
       var dir = (shooter.id === 1) ? 1 : -1;
 
-      var angleRad = (state.angleDeg * Math.PI / 180);
+      var angleDeg = state.angleDeg;
+      if(dir === -1) angleDeg = 180 - angleDeg;
+      var angleRad = (angleDeg * Math.PI / 180);
       var speed = 120 + (state.power / 100) * 520;
 
-      var vx = Math.cos(angleRad) * speed * dir;
+      var vx = Math.cos(angleRad) * speed;
       var vy = -Math.sin(angleRad) * speed;
 
       state.projectile = {
@@ -1206,13 +1208,15 @@ HTML = r"""<!doctype html>
       var w = state.view.w;
 
       var dir = (shooter.id === 1) ? 1 : -1;
-      var angle = state.angleDeg * Math.PI / 180;
+      var angleDeg = state.angleDeg;
+      if(dir === -1) angleDeg = 180 - angleDeg;
+      var angle = angleDeg * Math.PI / 180;
       var speed = 120 + (state.power / 100) * 520;
 
       var x = shooter.x * w + dir * (shooter.r + 2);
       var y = shooter.y - shooter.r * 0.15;
 
-      var vx = Math.cos(angle) * speed * dir;
+      var vx = Math.cos(angle) * speed;
       var vy = -Math.sin(angle) * speed;
 
       var points = 26;
