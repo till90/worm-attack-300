@@ -143,6 +143,51 @@ HTML = r"""<!doctype html>
     .btn:hover{transform: translateY(-1px)}
     .btn:active{transform:none}
 
+    .nav-dropdown{ position: relative; display: inline-flex; align-items: center; }
+   .nav-dropbtn:hover{
+    color: var(--text);
+    transform: none;
+  }
+
+  .nav-caret{
+    font-size: .9em;
+    opacity: 1;
+  }
+
+  .nav-menu{
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    min-width: 240px;
+    padding: 10px;
+    z-index: 6000;
+
+    /* .card bringt bereits Border/Radius/Shadow; wir ergänzen nur Hintergrund-Konsistenz */
+    background: rgba(17, 26, 46, 1);
+    backdrop-filter: blur(10px);
+  }
+
+  [data-theme="light"] .nav-menu{
+    opacity: 1;
+    background: var(--bg);
+  }
+
+  .nav-menu a{
+    display: block;
+    padding: 10px 10px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 650;
+  }
+
+  .nav-menu a:hover{
+    background: rgba(110,168,254,.12);
+  }
+
+  #servicesMenu {color: var(--bg);};
+
+
     .sr-only{
       position:absolute; width:1px; height:1px; padding:0; margin:-1px;
       overflow:hidden; clip:rect(0,0,0,0); border:0;
@@ -165,7 +210,6 @@ HTML = r"""<!doctype html>
     .card{
       border:1px solid var(--border);
       border-radius: var(--radius);
-      background: rgba(255,255,255,.04);
       padding:16px;
       box-shadow: var(--shadow);
     }
