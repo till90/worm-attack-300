@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+API:
+- GET /api/health -> Überprüft den Zustand des Dienstes
+- GET /api/meta   -> Gibt Metadaten über den Dienst zurück
+"""
 
 import os
 from flask import Flask, jsonify, make_response, render_template_string, request
